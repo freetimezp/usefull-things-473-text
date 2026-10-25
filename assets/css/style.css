@@ -1,65 +1,530 @@
+/* =========================================
+   A STROLL BY THE SEA
+   Romantic editorial / vintage travel
+========================================= */
+
+:root {
+    --ivory: #f5e8d1;
+    --muted-ivory: #d9c4a4;
+    --gold: #c4a16b;
+    --terracotta: #a86f52;
+    --walnut: #49372a;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+html,
 body {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-
-    background: radial-gradient(circle at center, #0f1724 0%, #05070d 50%, #000 100%);
+    width: 100%;
+    min-height: 100%;
 }
+
+body {
+    min-height: 100svh;
+    overflow: hidden;
+    background: #49372a;
+    color: var(--ivory);
+    font-family: "DM Mono", monospace;
+}
+
+.invitation {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    isolation: isolate;
+    min-height: 100svh;
+    padding: 34px 5.5%;
+    overflow: hidden;
+}
+
+/* Painting */
+
+.painting,
+.painting-overlay,
+.film-grain {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.painting {
+    z-index: -3;
+    background-image: url("../images/bg.jpg");
+    background-position: center 54%;
+    background-size: cover;
+    transform: scale(1.035);
+
+    will-change: transform;
+}
+
+.painting-overlay {
+    z-index: -2;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(40, 27, 19, 0.47) 0%,
+            rgba(49, 34, 24, 0.12) 34%,
+            rgba(49, 34, 24, 0.23) 65%,
+            rgba(35, 24, 18, 0.64) 100%
+        ),
+        linear-gradient(90deg, rgba(49, 34, 24, 0.32), transparent 70%);
+}
+
+.film-grain {
+    z-index: 4;
+    opacity: 0.13;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.48'/%3E%3C/svg%3E");
+    mix-blend-mode: soft-light;
+}
+
+/* Fine antique frame */
+
+.frame {
+    position: absolute;
+    z-index: 3;
+    inset: 18px;
+    border: 1px solid rgba(245, 232, 209, 0.48);
+    pointer-events: none;
+}
+
+.frame::before {
+    content: "";
+    position: absolute;
+    inset: 5px;
+    border: 1px solid rgba(245, 232, 209, 0.19);
+}
+
+.frame-corner {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-color: var(--gold);
+    border-style: solid;
+}
+
+.frame-corner--tl {
+    top: -1px;
+    left: -1px;
+    border-width: 2px 0 0 2px;
+}
+
+.frame-corner--tr {
+    top: -1px;
+    right: -1px;
+    border-width: 2px 2px 0 0;
+}
+
+.frame-corner--bl {
+    bottom: -1px;
+    left: -1px;
+    border-width: 0 0 2px 2px;
+}
+
+.frame-corner--br {
+    right: -1px;
+    bottom: -1px;
+    border-width: 0 2px 2px 0;
+}
+
+/* Header and footer */
+
+.topbar,
+.bottombar {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+}
+
+.topbar {
+    padding: 8px 10px;
+}
+
+.topbar-label {
+    font-size: 10px;
+}
+
+.topbar-edition,
+.footer-note,
+.footer-year {
+    color: var(--muted-ivory);
+}
+
+.bottombar {
+    padding: 8px 10px;
+}
+
+.scroll-indicator {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--ivory);
+    transition: color 0.3s ease;
+}
+
+.scroll-arrow {
+    display: inline-block;
+    color: var(--gold);
+    font-size: 17px;
+    transition: transform 0.3s ease;
+}
+
+.invitation.is-active .scroll-arrow {
+    transform: translate(3px, -3px);
+}
+
+/* Central invitation */
+
+.invitation-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 40px 0;
+    text-align: center;
+}
+
+.eyebrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 13px;
+    margin-bottom: 36px;
+    color: var(--muted-ivory);
+    font-size: 8px;
+    letter-spacing: 0.23em;
+}
+
+.eyebrow-line {
+    width: 28px;
+    height: 1px;
+    background: var(--gold);
+}
+
+/* Interactive typography */
 
 .ai-container {
     position: relative;
-    text-align: center;
-    perspective: 2500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.pre-title {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 4px;
+    color: var(--ivory);
+    font-size: 11px;
+    letter-spacing: 0.5em;
+    padding-left: 0.5em;
 }
 
 .ai-title {
-    font-size: clamp(5rem, 12vw, 12rem);
-    font-weight: 900;
-    color: #8fffff;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-
-    text-shadow: 0 0 20px rgba(0, 255, 255, 0.5), 0 0 50px rgba(0, 255, 255, 0.3);
-
+    position: relative;
+    z-index: 2;
+    color: var(--ivory);
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(5rem, 12.5vw, 12rem);
+    font-weight: 500;
+    line-height: 0.95;
+    letter-spacing: 0.035em;
+    white-space: nowrap;
+    text-shadow:
+        0 2px 1px rgba(42, 25, 16, 0.28),
+        0 12px 35px rgba(33, 21, 14, 0.18);
     transform-style: preserve-3d;
 }
 
 .char {
     display: inline-block;
     transform-style: preserve-3d;
+    backface-visibility: hidden;
 }
+
+.title-ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 13px;
+    width: 180px;
+    margin: 22px 0 18px;
+}
+
+.title-ornament > span:not(.ornament-star) {
+    flex: 1;
+    height: 1px;
+    background: rgba(245, 232, 209, 0.6);
+}
+
+.ornament-star {
+    color: var(--gold);
+    font-size: 17px;
+}
+
+.invitation-copy {
+    color: var(--ivory);
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(19px, 2.2vw, 27px);
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.45;
+    text-shadow: 0 2px 16px rgba(29, 19, 13, 0.35);
+}
+
+/* Expanding antique-gold rings */
 
 .scan-ring {
     position: absolute;
+    top: 42%;
     left: 50%;
-    top: 50%;
-
-    width: 450px;
-    height: 450px;
-
-    transform: translate(-50%, -50%);
-
-    border: 1px solid rgba(0, 255, 255, 0.15);
+    width: clamp(290px, 43vw, 560px);
+    aspect-ratio: 1;
+    border: 1px solid rgba(228, 194, 139, 0.45);
     border-radius: 50%;
-
-    opacity: 0.4;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.7);
+    pointer-events: none;
+    will-change: transform, opacity;
 }
 
+.scan-ring::before,
+.scan-ring::after {
+    content: "";
+    position: absolute;
+    inset: 12px;
+    border: 1px solid rgba(245, 232, 209, 0.15);
+    border-radius: 50%;
+}
+
+.scan-ring::after {
+    inset: 25px;
+    border-style: dashed;
+    border-color: rgba(228, 194, 139, 0.3);
+}
+
+.scan-ring--inner {
+    width: clamp(230px, 33vw, 420px);
+    border-color: rgba(245, 232, 209, 0.16);
+}
+
+.scan-ring--inner::before {
+    inset: 16px;
+}
+
+.scan-ring--inner::after {
+    display: none;
+}
+
+/* Hover-revealed invitation */
+
 .unlock-status {
-    margin-top: 40px;
-
-    font-size: 14px;
-    letter-spacing: 8px;
-
-    color: #00ffff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 27px;
+    color: var(--ivory);
+    font-size: 9px;
+    letter-spacing: 0.24em;
     opacity: 0;
+    transform: translateY(10px);
+}
+
+.status-dot {
+    width: 5px;
+    height: 5px;
+    flex: 0 0 5px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 12px rgba(228, 194, 139, 0.7);
+}
+
+/* Destination details */
+
+.destination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 48px;
+    color: var(--muted-ivory);
+    font-size: 8px;
+    letter-spacing: 0.19em;
+}
+
+.destination-number {
+    color: var(--gold);
+}
+
+.destination-divider {
+    width: 24px;
+    height: 1px;
+    background: rgba(245, 232, 209, 0.45);
+}
+
+/* Responsive */
+
+@media (hover: hover) and (pointer: fine) {
+    .ai-container:hover .ai-title {
+        color: #fff5df;
+    }
+
+    .ai-container:hover .scroll-indicator {
+        color: var(--gold);
+    }
+}
+
+@media (max-width: 700px) {
+    .invitation {
+        padding: 24px 7%;
+    }
+
+    .frame {
+        inset: 10px;
+    }
+
+    .painting {
+        background-position: 28% center;
+    }
+
+    .topbar,
+    .bottombar {
+        gap: 12px;
+        font-size: 7px;
+        letter-spacing: 0.12em;
+    }
+
+    .topbar-label {
+        font-size: 8px;
+    }
+
+    .topbar-edition {
+        text-align: right;
+    }
+
+    .footer-note {
+        max-width: 90px;
+        line-height: 1.7;
+    }
+
+    .footer-year {
+        text-align: right;
+    }
+
+    .eyebrow {
+        gap: 8px;
+        margin-bottom: 30px;
+        font-size: 7px;
+        letter-spacing: 0.13em;
+    }
+
+    .eyebrow-line {
+        width: 15px;
+    }
+
+    .pre-title {
+        font-size: 9px;
+        letter-spacing: 0.35em;
+    }
+
+    .ai-title {
+        font-size: clamp(4rem, 14.5vw, 7rem);
+    }
+
+    .invitation-copy {
+        font-size: clamp(19px, 5vw, 25px);
+    }
+
+    .scan-ring {
+        width: min(90vw, 420px);
+    }
+
+    .scan-ring--inner {
+        width: min(70vw, 320px);
+    }
+
+    .destination {
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 38px;
+        font-size: 7px;
+        letter-spacing: 0.1em;
+    }
+
+    .destination-divider {
+        width: 12px;
+    }
+
+    .scroll-indicator {
+        gap: 6px;
+    }
+
+    .scroll-indicator > span:first-child {
+        max-width: 80px;
+        line-height: 1.6;
+    }
+
+    .unlock-status {
+        font-size: 8px;
+        letter-spacing: 0.15em;
+    }
+}
+
+@media (max-height: 600px) and (min-width: 701px) {
+    .invitation {
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .invitation-content {
+        padding: 18px 0;
+    }
+
+    .eyebrow {
+        margin-bottom: 16px;
+    }
+
+    .ai-title {
+        font-size: clamp(4rem, 10vh, 7rem);
+    }
+
+    .title-ornament {
+        margin: 12px 0;
+    }
+
+    .invitation-copy {
+        font-size: 20px;
+    }
+
+    .unlock-status {
+        margin-top: 15px;
+    }
+
+    .destination {
+        margin-top: 24px;
+    }
+}
+
+/* Respect reduced-motion preferences */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+    }
 }

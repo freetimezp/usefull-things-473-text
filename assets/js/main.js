@@ -1,121 +1,401 @@
-const title = document.querySelector(".ai-title");
-const container = document.querySelector(".ai-container");
-const ring = document.querySelector(".scan-ring");
-const status = document.querySelector(".unlock-status");
+(() => {
+    const title = document.querySelector(".ai-title");
+    const container = document.querySelector(".ai-container");
+    const invitation = document.querySelector(".invitation");
+    const rings = gsap.utils.toArray(".scan-ring");
+    const status = document.querySelector(".unlock-status");
+    const reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+    ).matches;
 
-const split = SplitText.create(title, {
-    type: "chars",
-});
+    if (!title || !container || !status || !window.gsap) return;
 
-const chars = split.chars;
+    // Register SplitText when available.
+    if (window.SplitText) {
+        gsap.registerPlugin(SplitText);
+    }
 
-const originalText = title.innerText;
-const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$%@*&";
+    let split = null;
+    let chars = [];
+    let originalChars = [];
+    let hoverTimeline = null;
+    let decryptTween = null;
+    let active = false;
+    let floatingTween = null;
 
-const originalChars = chars.map((c) => c.textContent);
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-function decryptText() {
-    let frame = { value: 0 };
+    // Split the heading into individually animated characters.
+    if (window.SplitText) {
+        split = SplitText.create(title, {
+            type: "chars",
+            charsClass: "char",
+        });
 
-    gsap.to(frame, {
-        value: chars.length,
-        duration: 1,
-        ease: "none",
+        chars = split.chars;
+        originalChars = chars.map((char) => char.textContent);
+    }
 
-        onUpdate() {
-            chars.forEach((char, index) => {
-                if (index < frame.value) {
-                    char.textContent = originalChars[index];
-                } else {
-                    char.textContent = letters[Math.floor(Math.random() * letters.length)];
-                }
-            });
+    // Gentle entrance on initial page load.
+    gsap.set(
+        [
+            ".topbar",
+            ".bottombar",
+            ".eyebrow",
+            ".pre-title",
+            ".title-ornament",
+            ".invitation-copy",
+            ".destination",
+        ],
+        {
+            autoAlpha: 0,
+            y: 12,
         },
+    );
 
-        onComplete() {
-            chars.forEach((char, index) => {
-                char.textContent = originalChars[index];
-            });
+    gsap.set(title, {
+        autoAlpha: 0,
+    });
+
+    gsap.set(rings, {
+        scale: 0.75,
+        rotation: -25,
+        autoAlpha: 0,
+        transformOrigin: "50% 50%",
+    });
+
+    const intro = gsap.timeline({
+        defaults: {
+            ease: "power3.out",
         },
     });
-}
 
-container.addEventListener("mouseenter", () => {
-    decryptText();
-
-    const tl = gsap.timeline();
-
-    tl.to(ring, {
-        scale: 1.6,
-        rotation: 180,
-        opacity: 1,
-        duration: 1,
-        ease: "power4.out",
-    })
-
-        .fromTo(
-            chars,
-            {
-                opacity: 0,
-                z: -300,
-                rotationX: -90,
-            },
-            {
-                opacity: 1,
-                z: 0,
-                rotationX: 0,
-                stagger: 0.03,
-                duration: 1,
-                ease: "expo.out",
-            },
-            0
-        )
-
+    intro
+        .to(".topbar, .bottombar", {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.8,
+        })
         .to(
+            ".eyebrow",
+            {
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.8,
+            },
+            "-=0.45",
+        )
+        .to(
+            title,
+            {
+                autoAlpha: 1,
+                duration: 0.9,
+            },
+            "-=0.35",
+        );
+
+    if (chars.length && !reducedMotion) {
+        gsap.set(chars, {
+            transformOrigin: "50% 100%",
+        });
+
+        intro.from(
             chars,
             {
-                y: (i) => gsap.utils.random(-10, 10),
-                z: (i) => gsap.utils.random(-50, 50),
+                y: 35,
+                rotationX: -45,
+                opacity: 0,
+                stagger: 0.055,
+                duration: 0.9,
+                ease: "back.out(1.5)",
+            },
+            "-=0.75",
+        );
+    }
+
+    intro
+        .to(
+            ".title-ornament",
+            {
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.7,
+            },
+            "-=0.4",
+        )
+        .to(
+            ".invitation-copy",
+            {
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.8,
+            },
+            "-=0.35",
+        )
+        .to(
+            ".destination",
+            {
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.7,
+            },
+            "-=0.4",
+        );
+
+    // Optional slow cinematic movement in the painting.
+    if (!reducedMotion) {
+        gsap.to(".painting", {
+            scale: 1.08,
+            duration: 18,
+            ease: "sine.inOut",
+            yoyo: true,
+            repeat: -1,
+        });
+    }
+
+    // Decode the heading from random characters to its real text.
+    function decryptText() {
+        if (!chars.length || reducedMotion) return;
+
+        if (decryptTween) {
+            decryptTween.kill();
+        }
+
+        const progress = { value: 0 };
+
+        chars.forEach((char, index) => {
+            char.textContent =
+                letters[Math.floor(Math.random() * letters.length)];
+
+            char.style.opacity = "1";
+        });
+
+        decryptTween = gsap.to(progress, {
+            value: chars.length,
+            duration: 0.85,
+            ease: "none",
+
+            onUpdate() {
+                const revealed = Math.floor(progress.value);
+
+                chars.forEach((char, index) => {
+                    if (index < revealed) {
+                        char.textContent = originalChars[index];
+                    } else {
+                        char.textContent =
+                            letters[Math.floor(Math.random() * letters.length)];
+                    }
+                });
+            },
+
+            onComplete() {
+                chars.forEach((char, index) => {
+                    char.textContent = originalChars[index];
+                });
+            },
+        });
+    }
+
+    function activate() {
+        if (active) return;
+
+        active = true;
+        invitation.classList.add("is-active");
+
+        if (reducedMotion) {
+            gsap.to(status, {
+                autoAlpha: 1,
+                duration: 0.3,
+            });
+
+            gsap.to(rings, {
+                autoAlpha: 0.65,
+                duration: 0.3,
+            });
+
+            return;
+        }
+
+        decryptText();
+
+        if (hoverTimeline) {
+            hoverTimeline.kill();
+        }
+
+        if (floatingTween) {
+            floatingTween.kill();
+        }
+
+        gsap.killTweensOf(rings);
+        gsap.killTweensOf(chars);
+        gsap.killTweensOf(status);
+
+        hoverTimeline = gsap.timeline();
+
+        hoverTimeline
+            .to(
+                rings[0],
+                {
+                    scale: 1.35,
+                    rotation: 35,
+                    autoAlpha: 0.8,
+                    duration: 1.2,
+                    ease: "power3.out",
+                },
+                0,
+            )
+            .to(
+                rings[1],
+                {
+                    scale: 1.15,
+                    rotation: -20,
+                    autoAlpha: 0.65,
+                    duration: 1,
+                    ease: "power3.out",
+                },
+                0.08,
+            );
+
+        if (chars.length) {
+            hoverTimeline.fromTo(
+                chars,
+                {
+                    z: -60,
+                    rotationX: -45,
+                    opacity: 0.25,
+                },
+                {
+                    z: 0,
+                    rotationX: 0,
+                    opacity: 1,
+                    stagger: 0.045,
+                    duration: 0.8,
+                    ease: "expo.out",
+                },
+                0,
+            );
+
+            // A very subtle floating motion, not a harsh bounce.
+            floatingTween = gsap.to(chars, {
+                y: (index) =>
+                    Math.sin(index * 1.2) * 4 + gsap.utils.random(-1, 1),
+                duration: 1.8,
+                stagger: 0.035,
                 repeat: -1,
                 yoyo: true,
-                duration: 2,
-                stagger: 0.02,
-            },
-            0.8
-        )
+                ease: "sine.inOut",
+            });
+        }
 
-        .to(
+        hoverTimeline.to(
             status,
             {
-                opacity: 1,
-                y: -10,
-                duration: 0.5,
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.6,
+                ease: "power2.out",
             },
-            0.6
+            0.35,
         );
-});
+    }
 
-container.addEventListener("mouseleave", () => {
-    gsap.killTweensOf(chars);
+    function deactivate() {
+        if (!active) return;
 
-    gsap.to(chars, {
-        y: 0,
-        z: 0,
-        rotationX: 0,
-        duration: 0.8,
-        ease: "expo.out",
+        active = false;
+        invitation.classList.remove("is-active");
+
+        if (hoverTimeline) {
+            hoverTimeline.kill();
+            hoverTimeline = null;
+        }
+
+        if (floatingTween) {
+            floatingTween.kill();
+            floatingTween = null;
+        }
+
+        if (decryptTween) {
+            decryptTween.kill();
+            decryptTween = null;
+        }
+
+        gsap.killTweensOf(chars);
+        gsap.killTweensOf(rings);
+        gsap.killTweensOf(status);
+
+        // Restore the original lettering.
+        chars.forEach((char, index) => {
+            char.textContent = originalChars[index];
+        });
+
+        gsap.to(chars, {
+            y: 0,
+            z: 0,
+            rotationX: 0,
+            opacity: 1,
+            duration: 0.55,
+            ease: "power3.out",
+            overwrite: true,
+        });
+
+        gsap.to(rings, {
+            scale: 0.75,
+            rotation: -25,
+            autoAlpha: 0,
+            duration: 0.65,
+            ease: "power2.out",
+            overwrite: true,
+        });
+
+        gsap.to(status, {
+            autoAlpha: 0,
+            y: 10,
+            duration: 0.3,
+            overwrite: true,
+        });
+    }
+
+    // Desktop interaction.
+    container.addEventListener("mouseenter", activate);
+    container.addEventListener("mouseleave", deactivate);
+
+    // Touch interaction: tap to activate, tap again to reset.
+    container.addEventListener("click", (event) => {
+        if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+            return;
+        }
+
+        event.preventDefault();
+
+        if (active) {
+            deactivate();
+        } else {
+            activate();
+        }
     });
 
-    gsap.to(ring, {
-        scale: 1,
-        rotation: 0,
-        opacity: 0.4,
-        duration: 0.8,
-    });
+    // Keyboard accessibility.
+    container.setAttribute("role", "button");
+    container.setAttribute("tabindex", "0");
+    container.setAttribute(
+        "aria-label",
+        "Reveal the invitation to take a stroll",
+    );
 
-    gsap.to(status, {
-        opacity: 0,
-        y: 0,
-        duration: 0.4,
+    container.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+
+            if (active) {
+                deactivate();
+            } else {
+                activate();
+            }
+        }
+
+        if (event.key === "Escape") {
+            deactivate();
+        }
     });
-});
+})();

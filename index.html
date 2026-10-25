@@ -1,20 +1,100 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Future Hover</title>
+
+        <meta name="theme-color" content="#49372a" />
+
+        <title>A Walk by the Sea — An Invitation</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+        <link
+            href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap"
+            rel="stylesheet"
+        />
 
         <link rel="stylesheet" href="./assets/css/style.css" />
     </head>
+
     <body>
-        <div class="ai-container">
-            <div class="scan-ring"></div>
+        <main class="invitation">
+            <!-- Painting background -->
+            <div class="painting"></div>
+            <div class="painting-overlay"></div>
+            <div class="film-grain"></div>
 
-            <h1 class="ai-title">HOVER</h1>
+            <!-- Decorative frame -->
+            <div class="frame">
+                <span class="frame-corner frame-corner--tl"></span>
+                <span class="frame-corner frame-corner--tr"></span>
+                <span class="frame-corner frame-corner--bl"></span>
+                <span class="frame-corner frame-corner--br"></span>
+            </div>
 
-            <div class="unlock-status">AI ACCESS GRANTED</div>
-        </div>
+            <!-- Top editorial details -->
+            <header class="topbar">
+                <span class="topbar-label">THE MEDITERRANEAN JOURNAL</span>
+                <span class="topbar-edition">VOL. I — SUMMER</span>
+            </header>
+
+            <!-- Main interactive invitation -->
+            <section class="invitation-content">
+                <div class="eyebrow">
+                    <span class="eyebrow-line"></span>
+                    <span>A LITTLE ESCAPE FROM ORDINARY DAYS</span>
+                    <span class="eyebrow-line"></span>
+                </div>
+
+                <div class="ai-container">
+                    <div class="scan-ring"></div>
+                    <div class="scan-ring scan-ring--inner"></div>
+
+                    <span class="pre-title">SHALL WE TAKE</span>
+
+                    <h1 class="ai-title">A WALK</h1>
+
+                    <div class="title-ornament">
+                        <span></span>
+                        <span class="ornament-star">✳</span>
+                        <span></span>
+                    </div>
+
+                    <p class="invitation-copy">
+                        Where the old streets meet the endless sea,
+                        <br />
+                        and time forgets to hurry.
+                    </p>
+
+                    <div class="unlock-status">
+                        <span class="status-dot"></span>
+                        THE AFTERNOON IS OURS
+                    </div>
+                </div>
+
+                <div class="destination">
+                    <span class="destination-number">01</span>
+                    <span class="destination-divider"></span>
+                    <span class="destination-name">SOMEWHERE IN ITALY</span>
+                    <span class="destination-divider"></span>
+                    <span class="destination-coordinates">40° 42' N</span>
+                </div>
+            </section>
+
+            <!-- Bottom editorial details -->
+            <footer class="bottombar">
+                <span class="footer-note">A SLOWER KIND OF BEAUTY</span>
+
+                <div class="scroll-indicator">
+                    <span>MOVE YOUR CURSOR</span>
+                    <span class="scroll-arrow">↗</span>
+                </div>
+
+                <span class="footer-year">EST. 1897</span>
+            </footer>
+        </main>
 
         <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/SplitText.min.js"></script>

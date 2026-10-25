@@ -1,0 +1,130 @@
+A Walk by the Sea — An Invitation
+
+
+<span class="frame-corner frame-corner--tl"></span>
+<span class="frame-corner frame-corner--tr"></span>
+<span class="frame-corner frame-corner--bl"></span>
+<span class="frame-corner frame-corner--br"></span>
+
+
+<span class="topbar-label">THE MEDITERRANEAN JOURNAL</span>
+<span class="topbar-edition">VOL. I — SUMMER</span>
+
+
+<span class="eyebrow-line"></span>
+<span>A LITTLE ESCAPE FROM ORDINARY DAYS</span>
+<span class="eyebrow-line"></span>
+
+
+SHALL WE TAKE
+
+
+<span></span>
+<span class="ornament-star">✳</span>
+<span></span>
+
+
+Where the old streets meet the endless sea,
+<br />
+and time forgets to hurry.
+
+
+<span class="status-dot"></span>
+THE AFTERNOON IS OURS
+
+
+<span class="destination-number">01</span>
+<span class="destination-divider"></span>
+<span class="destination-name">SOMEWHERE IN ITALY</span>
+<span class="destination-divider"></span>
+<span class="destination-coordinates">40° 42' N</span>
+
+
+A SLOWER KIND OF BEAUTY
+
+
+<span>MOVE YOUR CURSOR</span>
+<span class="scroll-arrow">↗</span>
+
+
+EST. 1897
+
+
+
+:root {
+    --ivory: #f5e8d1;
+    --muted-ivory: #d9c4a4;
+    --gold: #c4a16b;
+    --terracotta: #a86f52;
+    --walnut: #49372a;
+    --mono: "DM Mono", monospace;
+    --garamond: "Cormorant Garamond", serif;
+}
+
+
+background:
+        linear-gradient(
+            180deg,
+            rgba(40, 27, 19, 0.47) 0%,
+            rgba(49, 34, 24, 0.12) 34%,
+            rgba(49, 34, 24, 0.23) 65%,
+            rgba(35, 24, 18, 0.64) 100%
+        ),
+        linear-gradient(90deg, rgba(49, 34, 24, 0.32), transparent 70%);
+
+
+
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.48'/%3E%3C/svg%3E");
+
+
+
+    text-shadow:
+        0 2px 1px rgba(42, 25, 16, 0.28),
+        0 12px 35px rgba(33, 21, 14, 0.18);
+
+
+
+
+    const title = document.querySelector(".ai-title");
+    const container = document.querySelector(".ai-container");
+    const invitation = document.querySelector(".invitation");
+    const rings = gsap.utils.toArray(".scan-ring");
+    const status = document.querySelector(".unlock-status");
+    const reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+
+
+    let split = null;
+    let chars = [];
+    let originalChars = [];
+    let hoverTimeline = null;
+    let decryptTween = null;
+    let active = false;
+    let floatingTween = null;
+
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+
+
+
+    ".topbar",
+            ".bottombar",
+            ".eyebrow",
+            ".pre-title",
+            ".title-ornament",
+            ".invitation-copy",
+            ".destination",
+
+
+
+        
+    container.setAttribute("role", "button");
+    container.setAttribute("tabindex", "0");
+    container.setAttribute(
+        "aria-label",
+        "Reveal the invitation to take a stroll",
+    );
+
+

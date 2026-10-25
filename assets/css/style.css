@@ -1,7 +1,13 @@
-/* =========================================
-   A STROLL BY THE SEA
-   Romantic editorial / vintage travel
-========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
 
 :root {
     --ivory: #f5e8d1;
@@ -9,12 +15,8 @@
     --gold: #c4a16b;
     --terracotta: #a86f52;
     --walnut: #49372a;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    --mono: "DM Mono", monospace;
+    --garamond: "Cormorant Garamond", serif;
 }
 
 html,
@@ -28,21 +30,21 @@ body {
     overflow: hidden;
     background: #49372a;
     color: var(--ivory);
-    font-family: "DM Mono", monospace;
+    font-family: var(--mono);
 }
 
 .invitation {
     position: relative;
+
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
     isolation: isolate;
     min-height: 100svh;
     padding: 34px 5.5%;
     overflow: hidden;
 }
-
-/* Painting */
 
 .painting,
 .painting-overlay,
@@ -54,7 +56,7 @@ body {
 
 .painting {
     z-index: -3;
-    background-image: url("../images/bg.jpg");
+    background-image: url(../images/bg.jpg);
     background-position: center 54%;
     background-size: cover;
     transform: scale(1.035);
@@ -64,6 +66,7 @@ body {
 
 .painting-overlay {
     z-index: -2;
+
     background:
         linear-gradient(
             180deg,
@@ -78,16 +81,16 @@ body {
 .film-grain {
     z-index: 4;
     opacity: 0.13;
+
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.48'/%3E%3C/svg%3E");
     mix-blend-mode: soft-light;
 }
-
-/* Fine antique frame */
 
 .frame {
     position: absolute;
     z-index: 3;
     inset: 18px;
+
     border: 1px solid rgba(245, 232, 209, 0.48);
     pointer-events: none;
 }
@@ -131,16 +134,16 @@ body {
     border-width: 0 2px 2px 0;
 }
 
-/* Header and footer */
-
 .topbar,
 .bottombar {
     position: relative;
     z-index: 5;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 20px;
+
     font-size: 9px;
     letter-spacing: 0.2em;
 }
@@ -167,6 +170,7 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
+
     color: var(--ivory);
     transition: color 0.3s ease;
 }
@@ -175,6 +179,7 @@ body {
     display: inline-block;
     color: var(--gold);
     font-size: 17px;
+
     transition: transform 0.3s ease;
 }
 
@@ -182,16 +187,16 @@ body {
     transform: translate(3px, -3px);
 }
 
-/* Central invitation */
-
 .invitation-content {
     position: relative;
     z-index: 2;
+
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     flex: 1;
+
     padding: 40px 0;
     text-align: center;
 }
@@ -201,6 +206,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 13px;
+
     margin-bottom: 36px;
     color: var(--muted-ivory);
     font-size: 8px;
@@ -213,40 +219,47 @@ body {
     background: var(--gold);
 }
 
-/* Interactive typography */
-
 .ai-container {
     position: relative;
+
     display: flex;
     flex-direction: column;
     align-items: center;
+
     cursor: pointer;
+
     -webkit-tap-highlight-color: transparent;
 }
 
 .pre-title {
     position: relative;
     z-index: 2;
+
     margin-bottom: 4px;
+    padding-left: 0.5em;
+
     color: var(--ivory);
     font-size: 11px;
     letter-spacing: 0.5em;
-    padding-left: 0.5em;
 }
 
 .ai-title {
     position: relative;
     z-index: 2;
+
     color: var(--ivory);
-    font-family: "Cormorant Garamond", serif;
+    font-family: var(--garamond);
     font-size: clamp(5rem, 12.5vw, 12rem);
     font-weight: 500;
     line-height: 0.95;
     letter-spacing: 0.035em;
+
     white-space: nowrap;
+
     text-shadow:
         0 2px 1px rgba(42, 25, 16, 0.28),
         0 12px 35px rgba(33, 21, 14, 0.18);
+
     transform-style: preserve-3d;
 }
 
@@ -261,6 +274,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 13px;
+
     width: 180px;
     margin: 22px 0 18px;
 }
@@ -278,35 +292,40 @@ body {
 
 .invitation-copy {
     color: var(--ivory);
-    font-family: "Cormorant Garamond", serif;
+    font-family: var(--garamond);
     font-size: clamp(19px, 2.2vw, 27px);
     font-weight: 400;
     font-style: italic;
     line-height: 1.45;
+
     text-shadow: 0 2px 16px rgba(29, 19, 13, 0.35);
 }
-
-/* Expanding antique-gold rings */
 
 .scan-ring {
     position: absolute;
     top: 42%;
     left: 50%;
+
     width: clamp(290px, 43vw, 560px);
     aspect-ratio: 1;
+
     border: 1px solid rgba(228, 194, 139, 0.45);
     border-radius: 50%;
-    opacity: 0;
+
     transform: translate(-50%, -50%) scale(0.7);
     pointer-events: none;
+
+    opacity: 0;
+
     will-change: transform, opacity;
 }
 
-.scan-ring::before,
-.scan-ring::after {
+.scan-ring::after,
+.scan-ring::before {
     content: "";
     position: absolute;
     inset: 12px;
+
     border: 1px solid rgba(245, 232, 209, 0.15);
     border-radius: 50%;
 }
@@ -330,16 +349,16 @@ body {
     display: none;
 }
 
-/* Hover-revealed invitation */
-
 .unlock-status {
     display: flex;
     align-items: center;
     gap: 10px;
+
     margin-top: 27px;
     color: var(--ivory);
     font-size: 9px;
     letter-spacing: 0.24em;
+
     opacity: 0;
     transform: translateY(10px);
 }
@@ -348,18 +367,19 @@ body {
     width: 5px;
     height: 5px;
     flex: 0 0 5px;
+
     border-radius: 50%;
     background: var(--gold);
+
     box-shadow: 0 0 12px rgba(228, 194, 139, 0.7);
 }
-
-/* Destination details */
 
 .destination {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 18px;
+
     margin-top: 48px;
     color: var(--muted-ivory);
     font-size: 8px;
@@ -375,8 +395,6 @@ body {
     height: 1px;
     background: rgba(245, 232, 209, 0.45);
 }
-
-/* Responsive */
 
 @media (hover: hover) and (pointer: fine) {
     .ai-container:hover .ai-title {
@@ -519,12 +537,10 @@ body {
     }
 }
 
-/* Respect reduced-motion preferences */
-
 @media (prefers-reduced-motion: reduce) {
     *,
-    *::before,
-    *::after {
+    *::after,
+    *::before {
         scroll-behavior: auto !important;
     }
 }

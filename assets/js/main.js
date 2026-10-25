@@ -4,13 +4,13 @@
     const invitation = document.querySelector(".invitation");
     const rings = gsap.utils.toArray(".scan-ring");
     const status = document.querySelector(".unlock-status");
+
     const reducedMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
     ).matches;
 
     if (!title || !container || !status || !window.gsap) return;
 
-    // Register SplitText when available.
     if (window.SplitText) {
         gsap.registerPlugin(SplitText);
     }
@@ -25,7 +25,6 @@
 
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-    // Split the heading into individually animated characters.
     if (window.SplitText) {
         split = SplitText.create(title, {
             type: "chars",
@@ -33,10 +32,11 @@
         });
 
         chars = split.chars;
+
         originalChars = chars.map((char) => char.textContent);
     }
 
-    // Gentle entrance on initial page load.
+    // state
     gsap.set(
         [
             ".topbar",
@@ -64,6 +64,8 @@
         transformOrigin: "50% 50%",
     });
 
+    // intro
+
     const intro = gsap.timeline({
         defaults: {
             ease: "power3.out",
@@ -76,6 +78,7 @@
             y: 0,
             duration: 0.8,
         })
+
         .to(
             ".eyebrow",
             {
@@ -85,13 +88,24 @@
             },
             "-=0.45",
         )
+
+        .to(
+            ".pre-title",
+            {
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.75,
+            },
+            "-=0.5",
+        )
+
         .to(
             title,
             {
                 autoAlpha: 1,
                 duration: 0.9,
             },
-            "-=0.35",
+            "-=0.4",
         );
 
     if (chars.length && !reducedMotion) {
@@ -123,6 +137,7 @@
             },
             "-=0.4",
         )
+
         .to(
             ".invitation-copy",
             {
@@ -132,6 +147,7 @@
             },
             "-=0.35",
         )
+
         .to(
             ".destination",
             {
@@ -142,7 +158,7 @@
             "-=0.4",
         );
 
-    // Optional slow cinematic movement in the painting.
+    // little bg move
     if (!reducedMotion) {
         gsap.to(".painting", {
             scale: 1.08,
@@ -153,7 +169,6 @@
         });
     }
 
-    // Decode the heading from random characters to its real text.
     function decryptText() {
         if (!chars.length || reducedMotion) return;
 
@@ -275,10 +290,10 @@
                 0,
             );
 
-            // A very subtle floating motion, not a harsh bounce.
             floatingTween = gsap.to(chars, {
                 y: (index) =>
                     Math.sin(index * 1.2) * 4 + gsap.utils.random(-1, 1),
+
                 duration: 1.8,
                 stagger: 0.035,
                 repeat: -1,
@@ -320,11 +335,10 @@
             decryptTween = null;
         }
 
-        gsap.killTweensOf(chars);
         gsap.killTweensOf(rings);
+        gsap.killTweensOf(chars);
         gsap.killTweensOf(status);
 
-        // Restore the original lettering.
         chars.forEach((char, index) => {
             char.textContent = originalChars[index];
         });
@@ -356,17 +370,14 @@
         });
     }
 
-    // Desktop interaction.
     container.addEventListener("mouseenter", activate);
     container.addEventListener("mouseleave", deactivate);
 
-    // Touch interaction: tap to activate, tap again to reset.
-    container.addEventListener("click", (event) => {
-        if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    container.addEventListener("click", (e) => {
+        if (window.matchMedia("(hover: hover) and (pointer: fine)").matches)
             return;
-        }
 
-        event.preventDefault();
+        e.preventDefault();
 
         if (active) {
             deactivate();
@@ -375,7 +386,6 @@
         }
     });
 
-    // Keyboard accessibility.
     container.setAttribute("role", "button");
     container.setAttribute("tabindex", "0");
     container.setAttribute(
@@ -383,9 +393,9 @@
         "Reveal the invitation to take a stroll",
     );
 
-    container.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
+    container.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
 
             if (active) {
                 deactivate();
@@ -394,7 +404,7 @@
             }
         }
 
-        if (event.key === "Escape") {
+        if (e.key === "Escape") {
             deactivate();
         }
     });
